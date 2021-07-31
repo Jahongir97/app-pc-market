@@ -16,8 +16,8 @@ import java.util.List;
 
 @RepositoryRestResource(path = "product", excerptProjection = ProjectionProduct.class)
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Query(value = "select distinct p.id, p.active, p.name, p.description, p.price, p.warranty_year,p.category_id,p.photo_id" +
-            " from product p join product_character pc on pc.id = p.id " +
-            "where p.price between :minPrice and :maxPrice and pc.character_id in (:idList)", nativeQuery = true)
+    @Query(value = "select * from product p join character ch on ch.product_id = p.id " +
+            "join property pr on pr.character_id=ch.id " +
+            "where p.price between :minPrice and :maxPrice and pr.id in (:idList)", nativeQuery = true)
     List<Product> findAllByFilter(Double startPrice, Double maxPrice, Collection<Integer> idList);
 }
